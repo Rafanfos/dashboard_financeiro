@@ -12,17 +12,22 @@ export const Wrapper = styled.div`
 
 export const LoginBox = styled.div`
   background: #fff;
-  padding: 3rem 2rem;
+  padding: 2rem 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
 `;
 
-export const Title = styled.h1`
+export const Title = styled.div`
   text-align: center;
   margin-bottom: 2rem;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 `;
 
 export const Form = styled.form`

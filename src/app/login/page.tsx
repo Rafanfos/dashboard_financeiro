@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
@@ -45,7 +46,18 @@ export default function LoginPage() {
   return (
     <Wrapper>
       <LoginBox>
-        <Title>Login</Title>
+        <Title>
+          <div className="logo">
+            <Image
+              src="/icon.png"
+              alt="Dashboard Financeiro"
+              width={50}
+              height={50}
+            />
+          </div>
+
+          <h1>Dashboard Financeiro</h1>
+        </Title>
         <Form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Label>Email</Label>
           <TextField
