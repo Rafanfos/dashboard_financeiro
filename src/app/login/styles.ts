@@ -37,7 +37,6 @@ export const Form = styled.form`
 `;
 
 export const Label = styled.label`
-  margin-bottom: 0.5rem;
   color: #444;
 `;
 
