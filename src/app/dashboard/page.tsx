@@ -2,31 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import Sidebar from "./components/Sidebar";
-import Filters from "./components/Filters";
 
-interface Transaction {
-  id: string;
-  date: string;
-  account: string;
-  industry: string;
-  state: string;
-  type: "income" | "expense";
-  status: "completed" | "pending";
-  amount: number;
-}
-
-interface FiltersState {
-  date: string;
-  account: string;
-  industry: string;
-  state: string;
-}
+import Filters from "./components/filters";
+import { ITransaction, IFiltersState } from "./types";
+import Sidebar from "./components/sidebar";
 
 export default function DashboardPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filtered, setFiltered] = useState<Transaction[]>([]);
-  const [filters, setFilters] = useState<FiltersState>({
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const [filtered, setFiltered] = useState<ITransaction[]>([]);
+  const [filters, setFilters] = useState<IFiltersState>({
     date: "",
     account: "",
     industry: "",
