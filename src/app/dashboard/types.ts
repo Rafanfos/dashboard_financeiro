@@ -1,11 +1,10 @@
 export interface ITransaction {
   id: string;
-  date: string;
+  date: Date;
   account: string;
   industry: string;
   state: string;
-  type: "income" | "expense";
-  status: "completed" | "pending";
+  transaction_type: string;
   amount: number;
 }
 
@@ -14,4 +13,10 @@ export interface IFiltersState {
   account: string;
   industry: string;
   state: string;
+}
+
+export interface ICompany {
+  name: string;
+  state: string;
+  industry: string;
 }
