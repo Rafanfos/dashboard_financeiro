@@ -71,6 +71,10 @@ export const CompanyCard = styled(CardContent)`
 export const CardBoxTitle = styled(Box)`
   padding: 10px 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 `;
 
 export const CardTitle = styled.span`
