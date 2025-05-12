@@ -36,6 +36,7 @@ export default function LoginPage() {
 
   const onSubmit = (data: LoginFormInputs) => {
     if (data.email === "test@mail.com" && data.password === "123456") {
+      localStorage.setItem("userEmail", data.email);
       toast.success("Login efetuado com sucesso!");
       setTimeout(() => router.push("/dashboard"), 1500);
     } else {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
 import { toast } from "react-toastify";
 
 import Filters from "./components/filters";
@@ -16,7 +15,9 @@ import {
   SectionTitle,
   SummaryGridContainer,
   CenteredMessage,
+  StyledGridItem,
 } from "./styles";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -28,6 +29,17 @@ export default function DashboardPage() {
     state: "",
   });
   const [companies, setCompanies] = useState<ICompany[]>([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      toast.error("Acesso não autorizado. Faça login.");
+      router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -148,13 +160,13 @@ export default function DashboardPage() {
               (tx) => tx.account === company.name
             );
             return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <StyledGridItem key={index}>
                 <SummaryCards
                   company={company}
                   transactions={companySpecificTransactions}
                   filterDate={filters.date}
                 />
-              </Grid>
+              </StyledGridItem>
             );
           })}
         </SummaryGridContainer>

@@ -18,16 +18,7 @@ export default function Sidebar() {
   };
 
   return (
-    <SidebarWrapper
-      sx={{
-        width: 250,
-        height: "100vh",
-        backgroundColor: "#3f51b5",
-        color: "white",
-        paddingTop: "20px",
-        position: "fixed",
-      }}
-    >
+    <SidebarWrapper>
       <List>
         <SidebarItem
           sx={{ cursor: "pointer" }}
