@@ -44,7 +44,7 @@ export default function DataChart({ transactions, filters }: Props) {
     let expenses = 0;
     let pendingDeposits = 0;
     let pendingWithdraws = 0;
-    console.log("pendingReferenceTimestamp", pendingReferenceTimestamp);
+
     data.forEach((transaction) => {
       const transactionTimestamp = transaction.date;
       const amount = Number(transaction.amount);
@@ -72,7 +72,7 @@ export default function DataChart({ transactions, filters }: Props) {
     };
   };
 
-  const financials = calculateFinances(transactions);
+  const finances = calculateFinances(transactions);
 
   let chartTitle =
     filters && filters.account
@@ -89,10 +89,10 @@ export default function DataChart({ transactions, filters }: Props) {
       {
         label: "Valor (BRL)",
         data: [
-          financials.income,
-          financials.expenses,
-          financials.balance,
-          financials.pending,
+          finances.income,
+          finances.expenses,
+          finances.balance,
+          finances.pending,
         ],
         backgroundColor: [
           "rgba(75, 192, 192, 0.6)",
