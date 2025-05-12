@@ -5,13 +5,42 @@ import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 import { CardContent, Typography, Grid, TextField } from "@mui/material";
 
-export const SidebarWrapper = styled(Box)`
-  width: 250px;
-  height: 100vh;
+export const PageWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+export const MainContentWrapper = styled.main`
+  padding: 24px;
+  flex-grow: 1;
+  background-color: #f4f6f8;
+  width: 80%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+  }
+`;
+
+export const SidebarWrapper = styled.aside`
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+
   background-color: #3f51b5;
   color: white;
   padding-top: 20px;
-  position: fixed;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 export const SidebarItem = styled(ListItem)`
@@ -19,6 +48,7 @@ export const SidebarItem = styled(ListItem)`
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
+  max-width: 100%;
 `;
 
 export const CompanyCard = styled(CardContent)`
@@ -57,23 +87,13 @@ export const CardInfo = styled(Typography)`
   font-size: 10px;
 `;
 
-export const PageWrapper = styled(Box)`
-  display: flex;
-`;
-
-export const MainContentWrapper = styled(Box)`
-  margin-left: 250px;
-  padding: 24px;
-  flex-grow: 1;
-  background-color: #f4f6f8;
-`;
-
 export const DashboardTitle = styled(Typography).attrs(() => ({
   variant: "h4",
   gutterBottom: true,
 }))`
   color: #1a2027;
   font-weight: bold;
+  width: 80%;
 `;
 
 export const SectionTitle = styled(Typography).attrs(() => ({
@@ -94,6 +114,24 @@ export const SummaryGridContainer = styled(Grid).attrs(() => ({
   max-height: 200px;
   overflow: auto;
   padding: 10px;
+  max-width: 100%;
+  gap: 15px;
+`;
+
+export const StyledGridContainer = styled.ul`
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100vw;
+  gap: 15px;
+  padding: 10px !important;
+  max-width: 100%;
+  list-style: none;
+`;
+
+export const StyledGridItem = styled.li`
+  width: 200px;
+  list-style: none;
 `;
 
 export const CenteredMessage = styled(Typography).attrs((props) => ({

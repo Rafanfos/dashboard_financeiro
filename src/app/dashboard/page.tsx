@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
 import { toast } from "react-toastify";
 
 import Filters from "./components/filters";
@@ -16,6 +15,7 @@ import {
   SectionTitle,
   SummaryGridContainer,
   CenteredMessage,
+  StyledGridItem,
 } from "./styles";
 
 export default function DashboardPage() {
@@ -148,13 +148,13 @@ export default function DashboardPage() {
               (tx) => tx.account === company.name
             );
             return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <StyledGridItem key={index}>
                 <SummaryCards
                   company={company}
                   transactions={companySpecificTransactions}
                   filterDate={filters.date}
                 />
-              </Grid>
+              </StyledGridItem>
             );
           })}
         </SummaryGridContainer>

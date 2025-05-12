@@ -1,9 +1,9 @@
 "use client";
 
-import { Box, MenuItem, Grid } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IFiltersState, ITransaction } from "../types";
-import { FilterInput } from "../styles";
+import { FilterInput, StyledGridContainer, StyledGridItem } from "../styles";
 
 interface Props {
   filters: IFiltersState;
@@ -46,69 +46,67 @@ export default function Filters({ filters, setFilters, transactions }: Props) {
     };
 
   return (
-    <Box sx={{ mb: 4 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={3}>
-          <FilterInput
-            type="month"
-            value={tempDate}
-            onChange={handleDateChange}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
+    <StyledGridContainer>
+      <StyledGridItem>
+        <FilterInput
+          type="month"
+          value={tempDate}
+          onChange={handleDateChange}
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+        />
+      </StyledGridItem>
 
-        <Grid item xs={12} md={3}>
-          <FilterInput
-            select
-            label="Conta"
-            value={filters.account}
-            onChange={handleChange("account")}
-            fullWidth
-          >
-            <MenuItem value="">Todas</MenuItem>
-            {options.accounts.map((acc, i) => (
-              <MenuItem key={i} value={acc}>
-                {acc}
-              </MenuItem>
-            ))}
-          </FilterInput>
-        </Grid>
+      <StyledGridItem>
+        <FilterInput
+          select
+          label="Conta"
+          value={filters.account}
+          onChange={handleChange("account")}
+          fullWidth
+        >
+          <MenuItem value="">Todas</MenuItem>
+          {options.accounts.map((acc, i) => (
+            <MenuItem key={i} value={acc}>
+              {acc}
+            </MenuItem>
+          ))}
+        </FilterInput>
+      </StyledGridItem>
 
-        <Grid item xs={12} md={3}>
-          <FilterInput
-            select
-            label="Indústria"
-            value={filters.industry}
-            onChange={handleChange("industry")}
-            fullWidth
-          >
-            <MenuItem value="">Todas</MenuItem>
-            {options.industries.map((ind, i) => (
-              <MenuItem key={i} value={ind}>
-                {ind}
-              </MenuItem>
-            ))}
-          </FilterInput>
-        </Grid>
+      <StyledGridItem>
+        <FilterInput
+          select
+          label="Indústria"
+          value={filters.industry}
+          onChange={handleChange("industry")}
+          fullWidth
+        >
+          <MenuItem value="">Todas</MenuItem>
+          {options.industries.map((ind, i) => (
+            <MenuItem key={i} value={ind}>
+              {ind}
+            </MenuItem>
+          ))}
+        </FilterInput>
+      </StyledGridItem>
 
-        <Grid item xs={12} md={3}>
-          <FilterInput
-            select
-            label="Estado"
-            value={filters.state}
-            onChange={handleChange("state")}
-            fullWidth
-          >
-            <MenuItem value="">Todos</MenuItem>
-            {options.states.map((uf, i) => (
-              <MenuItem key={i} value={uf}>
-                {uf}
-              </MenuItem>
-            ))}
-          </FilterInput>
-        </Grid>
-      </Grid>
-    </Box>
+      <StyledGridItem>
+        <FilterInput
+          select
+          label="Estado"
+          value={filters.state}
+          onChange={handleChange("state")}
+          fullWidth
+        >
+          <MenuItem value="">Todos</MenuItem>
+          {options.states.map((uf, i) => (
+            <MenuItem key={i} value={uf}>
+              {uf}
+            </MenuItem>
+          ))}
+        </FilterInput>
+      </StyledGridItem>
+    </StyledGridContainer>
   );
 }
