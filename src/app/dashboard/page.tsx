@@ -33,8 +33,8 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const email = localStorage.getItem("userEmail");
-    if (!email) {
+    const session = localStorage.getItem("session");
+    if (!session) {
       toast.error("Acesso não autorizado. Faça login.");
       router.push("/");
     }
