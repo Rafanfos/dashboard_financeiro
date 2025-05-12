@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
-import { CardContent, Typography, Grid } from "@mui/material";
+import { CardContent, Typography, Grid, TextField } from "@mui/material";
 
 export const SidebarWrapper = styled(Box)`
   width: 250px;
@@ -118,4 +118,8 @@ export const InfoBox = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const FilterInput = styled(TextField)`
+  min-width: 100px;
 `;

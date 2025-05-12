@@ -58,12 +58,18 @@ export default function DashboardPage() {
     if (savedFilters) {
       try {
         setFilters(JSON.parse(savedFilters));
-      } catch (error: any) {
-        toast.error(
-          `Erro ao carregar filtros salvos: ${
-            error.message || "Os filtros foram redefinidos."
-          }`
-        );
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(
+            `Erro ao carregar filtros salvos: ${
+              error.message || "Os filtros foram redefinidos."
+            }`
+          );
+        } else {
+          toast.error(
+            "Erro ao carregar filtros salvos: Os filtros foram redefinidos."
+          );
+        }
         setFilters({
           date: "",
           account: "",
@@ -129,8 +135,6 @@ export default function DashboardPage() {
           transactions={transactions}
         />
 
-        <DataChart transactions={filteredForChart} filters={filters} />
-
         {companies.length > 0 && !filters.account && (
           <SectionTitle>Resumo por Empresa</SectionTitle>
         )}
@@ -168,6 +172,8 @@ export default function DashboardPage() {
           {filteredForChart.length} transações encontradas para os filtros
           aplicados (no gráfico).
         </CenteredMessage>
+
+        <DataChart transactions={filteredForChart} filters={filters} />
       </MainContentWrapper>
     </PageWrapper>
   );

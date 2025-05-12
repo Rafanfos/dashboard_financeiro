@@ -1,8 +1,9 @@
 "use client";
 
-import { Box, TextField, MenuItem, Grid } from "@mui/material";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Box, MenuItem, Grid } from "@mui/material";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IFiltersState, ITransaction } from "../types";
+import { FilterInput } from "../styles";
 
 interface Props {
   filters: IFiltersState;
@@ -11,6 +12,22 @@ interface Props {
 }
 
 export default function Filters({ filters, setFilters, transactions }: Props) {
+  const [tempDate, setTempDate] = useState(filters.date);
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempDate(e.target.value);
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (tempDate !== filters.date) {
+        setFilters((prev) => ({ ...prev, date: tempDate }));
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tempDate]);
   const options = useMemo(() => {
     const getUnique = (key: keyof ITransaction) => [
       ...new Set(transactions.map((tx) => tx[key])),
@@ -32,17 +49,17 @@ export default function Filters({ filters, setFilters, transactions }: Props) {
     <Box sx={{ mb: 4 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <TextField
-            label="Data (AAAA-MM)"
+          <FilterInput
             type="month"
-            value={filters.date}
-            onChange={handleChange("date")}
+            value={tempDate}
+            onChange={handleDateChange}
             fullWidth
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <TextField
+          <FilterInput
             select
             label="Conta"
             value={filters.account}
@@ -55,11 +72,11 @@ export default function Filters({ filters, setFilters, transactions }: Props) {
                 {acc}
               </MenuItem>
             ))}
-          </TextField>
+          </FilterInput>
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <TextField
+          <FilterInput
             select
             label="Indústria"
             value={filters.industry}
@@ -72,11 +89,11 @@ export default function Filters({ filters, setFilters, transactions }: Props) {
                 {ind}
               </MenuItem>
             ))}
-          </TextField>
+          </FilterInput>
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <TextField
+          <FilterInput
             select
             label="Estado"
             value={filters.state}
@@ -89,7 +106,7 @@ export default function Filters({ filters, setFilters, transactions }: Props) {
                 {uf}
               </MenuItem>
             ))}
-          </TextField>
+          </FilterInput>
         </Grid>
       </Grid>
     </Box>
