@@ -17,6 +17,7 @@ import {
   CenteredMessage,
   StyledGridItem,
 } from "./styles";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -28,6 +29,17 @@ export default function DashboardPage() {
     state: "",
   });
   const [companies, setCompanies] = useState<ICompany[]>([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      toast.error("Acesso não autorizado. Faça login.");
+      router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
