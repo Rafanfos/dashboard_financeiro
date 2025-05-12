@@ -74,17 +74,17 @@ export const CardBoxTitle = styled(Box)`
 `;
 
 export const CardTitle = styled.span`
-  font-size: 16px;
+  font-size: 16px !important;
   font-weight: bold;
 `;
 
 export const CardSubtitle = styled.span`
-  font-size: 12px;
+  font-size: 12px !important;
   color: gray;
 `;
 
 export const CardInfo = styled.span`
-  font-size: 10px;
+  font-size: 10px !important;
 `;
 
 export const DashboardTitle = styled(Typography).attrs(() => ({
