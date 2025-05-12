@@ -65,9 +65,9 @@ Para acessar o sistema, utilize as seguintes credenciais:
 4. Acesse no navegador: http://localhost:3000
 
 ## 📁 Estrutura de páginas
-/ → Página de login
+- / → Página de login
 
-/dashboard → Página principal do sistema com visualização e filtros
+- /dashboard → Página principal do sistema com visualização e filtros
 
 ## 🧪 Tecnologias utilizadas
 
@@ -84,11 +84,11 @@ Para acessar o sistema, utilize as seguintes credenciais:
 - TypeScript;
 
 ## 📌 Observações
-Os dados são carregados de um arquivo local (/transactions.json)
+- Os dados são carregados de um arquivo local (/transactions.json)
 
-A autenticação é baseada em localStorage
+- A autenticação é baseada em localStorage
 
-O projeto ainda está em desenvolvimento e pode receber novas funcionalidades
+- O projeto ainda está em desenvolvimento e pode receber novas funcionalidades
 
-🧑‍💻 Autor
+## 🧑‍💻 Autor
 Feito com 💻 por Rafanfos
