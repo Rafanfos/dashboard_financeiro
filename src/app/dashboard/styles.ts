@@ -73,17 +73,17 @@ export const CardBoxTitle = styled(Box)`
   text-align: center;
 `;
 
-export const CardTitle = styled(Typography)`
+export const CardTitle = styled.span`
   font-size: 16px;
   font-weight: bold;
 `;
 
-export const CardSubtitle = styled(Typography)`
+export const CardSubtitle = styled.span`
   font-size: 12px;
   color: gray;
 `;
 
-export const CardInfo = styled(Typography)`
+export const CardInfo = styled.span`
   font-size: 10px;
 `;
 
