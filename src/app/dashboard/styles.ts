@@ -89,6 +89,11 @@ export const SummaryGridContainer = styled(Grid).attrs(() => ({
   spacing: 3,
 }))`
   margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 200px;
+  overflow: auto;
+  padding: 10px;
 `;
 
 export const CenteredMessage = styled(Typography).attrs((props) => ({
