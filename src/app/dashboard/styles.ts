@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
-import { CardContent, Typography } from "@mui/material";
+import { CardContent, Typography, Grid } from "@mui/material";
 
 export const SidebarWrapper = styled(Box)`
   width: 250px;
@@ -55,4 +55,67 @@ export const CardSubtitle = styled(Typography)`
 
 export const CardInfo = styled(Typography)`
   font-size: 10px;
+`;
+
+export const PageWrapper = styled(Box)`
+  display: flex;
+`;
+
+export const MainContentWrapper = styled(Box)`
+  margin-left: 250px;
+  padding: 24px;
+  flex-grow: 1;
+  background-color: #f4f6f8;
+`;
+
+export const DashboardTitle = styled(Typography).attrs(() => ({
+  variant: "h4",
+  gutterBottom: true,
+}))`
+  color: #1a2027;
+  font-weight: bold;
+`;
+
+export const SectionTitle = styled(Typography).attrs(() => ({
+  variant: "h5",
+  gutterBottom: true,
+}))`
+  margin-top: 32px;
+  color: #333;
+`;
+
+export const SummaryGridContainer = styled(Grid).attrs(() => ({
+  container: true,
+  spacing: 3,
+}))`
+  margin-top: 8px;
+`;
+
+export const CenteredMessage = styled(Typography).attrs((props) => ({
+  variant: props.variant || "subtitle1",
+}))`
+  margin-top: 32px;
+  color: gray;
+  text-align: center;
+`;
+
+export const ChartContainer = styled(Box)`
+  margin-top: 32px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+`;
+
+export const InfoBox = styled(Box)`
+  margin-top: 16px;
+  padding: 16px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

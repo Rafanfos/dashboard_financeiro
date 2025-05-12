@@ -11,7 +11,8 @@ import {
   Legend,
 } from "chart.js";
 import { ITransaction, IFiltersState } from "../types";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { ChartContainer, InfoBox } from "../styles";
 
 ChartJS.register(
   CategoryScale,
@@ -28,28 +29,38 @@ interface Props {
 }
 
 export default function DataChart({ transactions, filters }: Props) {
-  const calculateFinancials = (data: ITransaction[]) => {
-    const currentDate = new Date();
+  const getPendingReferenceTimestamp = () => {
+    if (filters && filters.date && filters.date.match(/^\d{4}-\d{2}$/)) {
+      const [year, month] = filters.date.split("-").map(Number);
+      return new Date(year, month, 0, 23, 59, 59, 999).getTime();
+    } else {
+      return new Date().getTime();
+    }
+  };
+
+  const calculateFinances = (data: ITransaction[]) => {
+    const pendingReferenceTimestamp = getPendingReferenceTimestamp();
     let income = 0;
     let expenses = 0;
     let pendingDeposits = 0;
     let pendingWithdraws = 0;
-
+    console.log("pendingReferenceTimestamp", pendingReferenceTimestamp);
     data.forEach((transaction) => {
-      const transactionDate = new Date(transaction.date);
+      const transactionTimestamp = transaction.date;
       const amount = Number(transaction.amount);
 
-      if (transactionDate <= currentDate) {
-        if (transaction.transaction_type === "deposit") {
-          income += amount;
-        } else if (transaction.transaction_type === "withdraw") {
-          expenses += amount;
-        }
-      } else {
+      if (transactionTimestamp > pendingReferenceTimestamp) {
+        console.log("entrou");
         if (transaction.transaction_type === "deposit") {
           pendingDeposits += amount;
         } else if (transaction.transaction_type === "withdraw") {
           pendingWithdraws += amount;
+        }
+      } else {
+        if (transaction.transaction_type === "deposit") {
+          income += amount;
+        } else if (transaction.transaction_type === "withdraw") {
+          expenses += amount;
         }
       }
     });
@@ -61,13 +72,18 @@ export default function DataChart({ transactions, filters }: Props) {
     };
   };
 
-  const financials = calculateFinancials(transactions);
+  const financials = calculateFinances(transactions);
 
-  const chartTitle = filters.account
-    ? `Balanço Financeiro: ${filters.account}`
-    : "Balanço Financeiro Geral";
+  let chartTitle =
+    filters && filters.account
+      ? `Balanço Financeiro: ${filters.account}`
+      : "Balanço Financeiro Geral";
 
-  const data = {
+  if (filters && filters.date) {
+    chartTitle += ` - Mês de Referência: ${filters.date}`;
+  }
+
+  const chartData = {
     labels: ["Ganhos", "Despesas", "Saldo", "Pendências"],
     datasets: [
       {
@@ -79,10 +95,10 @@ export default function DataChart({ transactions, filters }: Props) {
           financials.pending,
         ],
         backgroundColor: [
-          "rgba(75, 192, 192, 0.6)", // Ganhos
-          "rgba(255, 99, 132, 0.6)", // Despesas
-          "rgba(54, 162, 235, 0.6)", // Saldo
-          "rgba(255, 206, 86, 0.6)", // Pendências
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
+          "rgba(54, 162, 235, 0.6)",
+          "rgba(255, 206, 86, 0.6)",
         ],
         borderColor: [
           "rgba(75, 192, 192, 1)",
@@ -97,6 +113,7 @@ export default function DataChart({ transactions, filters }: Props) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
@@ -143,39 +160,31 @@ export default function DataChart({ transactions, filters }: Props) {
     },
   };
 
-  if (transactions.length === 0 && filters.account) {
+  if (transactions.length === 0 && filters && filters.account) {
     return (
-      <Box sx={{ mt: 2, p: 2, textAlign: "center" }}>
+      <InfoBox>
         <Typography variant="subtitle1">
           Nenhuma transação encontrada para {filters.account} com os filtros
           aplicados.
         </Typography>
-      </Box>
+      </InfoBox>
     );
   }
 
-  if (transactions.length === 0 && !filters.account) {
+  if (transactions.length === 0 && !(filters && filters.account)) {
     return (
-      <Box sx={{ mt: 2, p: 2, textAlign: "center" }}>
+      <InfoBox>
         <Typography variant="subtitle1">
           Nenhuma transação encontrada com os filtros aplicados para o balanço
           geral.
         </Typography>
-      </Box>
+      </InfoBox>
     );
   }
 
   return (
-    <Box
-      sx={{
-        mt: 4,
-        p: 2,
-        backgroundColor: "white",
-        borderRadius: "8px",
-        boxShadow: 1,
-      }}
-    >
-      <Bar options={options} data={data} />
-    </Box>
+    <ChartContainer sx={{ height: { xs: "300px", md: "400px" } }}>
+      <Bar options={options} data={chartData} />
+    </ChartContainer>
   );
 }

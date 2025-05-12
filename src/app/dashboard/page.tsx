@@ -1,18 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
+import { toast } from "react-toastify";
 
 import Filters from "./components/filters";
 import { ITransaction, IFiltersState, ICompany } from "./types";
 import Sidebar from "./components/sidebar";
 import SummaryCards from "./components/summaryCards";
 import DataChart from "./components/chart";
-import { toast } from "react-toastify";
+import {
+  PageWrapper,
+  MainContentWrapper,
+  DashboardTitle,
+  SectionTitle,
+  SummaryGridContainer,
+  CenteredMessage,
+} from "./styles";
 
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  const [filtered, setFiltered] = useState<ITransaction[]>([]);
+  const [filteredForChart, setFilteredForChart] = useState<ITransaction[]>([]);
   const [filters, setFilters] = useState<IFiltersState>({
     date: "",
     account: "",
@@ -29,8 +37,16 @@ export default function DashboardPage() {
           throw new Error("Arquivo não encontrado ou falha na requisição");
         const data = await res.json();
         setTransactions(data);
-      } catch {
-        toast.error("Erro ao carregar transações. Verifique o arquivo.");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(
+            `Erro ao carregar transações: ${
+              err.message || "Verifique o arquivo."
+            }`
+          );
+        } else {
+          toast.error("Erro ao carregar transações: Verifique o arquivo.");
+        }
         setTransactions([]);
       }
     };
@@ -42,9 +58,11 @@ export default function DashboardPage() {
     if (savedFilters) {
       try {
         setFilters(JSON.parse(savedFilters));
-      } catch {
+      } catch (error: any) {
         toast.error(
-          "Erro ao carregar os filtros salvos. Os filtros foram redefinidos para os padrões."
+          `Erro ao carregar filtros salvos: ${
+            error.message || "Os filtros foram redefinidos."
+          }`
         );
         setFilters({
           date: "",
@@ -57,33 +75,16 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    // Filter transactions based on current filters
-    const result = transactions.filter((tx) => {
-      const transactionDate = new Date(tx.date);
-      const transactionYear = transactionDate.getFullYear();
-      // Month is 0-indexed, so add 1 and pad with '0' if needed
-      const transactionMonth = String(transactionDate.getMonth() + 1).padStart(
-        2,
-        "0"
-      );
-      const transactionYearMonth = `${transactionYear}-${transactionMonth}`;
-
-      const dateFilterMatch =
-        !filters.date || transactionYearMonth === filters.date;
+    const chartData = transactions.filter((tx) => {
       const accountFilterMatch =
         !filters.account || tx.account === filters.account;
       const industryFilterMatch =
         !filters.industry || tx.industry === filters.industry;
       const stateFilterMatch = !filters.state || tx.state === filters.state;
 
-      return (
-        dateFilterMatch &&
-        accountFilterMatch &&
-        industryFilterMatch &&
-        stateFilterMatch
-      );
+      return accountFilterMatch && industryFilterMatch && stateFilterMatch;
     });
-    setFiltered(result);
+    setFilteredForChart(chartData);
 
     localStorage.setItem("filters", JSON.stringify(filters));
 
@@ -113,80 +114,61 @@ export default function DashboardPage() {
           (c) => c.state === filters.state
         );
       }
-
       setCompanies(companiesToList);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, transactions]);
 
   return (
-    <Box display="flex">
+    <PageWrapper>
       <Sidebar />
-      <Box
-        sx={{
-          marginLeft: "250px",
-          padding: 3,
-          flexGrow: 1,
-          backgroundColor: "#f4f6f8",
-        }}
-      >
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ color: "#1A2027", fontWeight: "bold" }}
-        >
-          Dashboard Financeiro
-        </Typography>
+      <MainContentWrapper>
+        <DashboardTitle>Dashboard Financeiro</DashboardTitle>
         <Filters
           filters={filters}
           setFilters={setFilters}
-          transactions={transactions} // Pass all transactions for filter options
+          transactions={transactions}
         />
 
-        {/* Render the DataChart component here */}
-        <DataChart transactions={filtered} filters={filters} />
+        <DataChart transactions={filteredForChart} filters={filters} />
 
-        {/* Conditionally render SummaryCards title if there are companies to show */}
         {companies.length > 0 && !filters.account && (
-          <Typography variant="h5" gutterBottom sx={{ mt: 4, color: "#333" }}>
-            Resumo por Empresa
-          </Typography>
+          <SectionTitle>Resumo por Empresa</SectionTitle>
         )}
         {companies.length > 0 && filters.account && (
-          <Typography variant="h5" gutterBottom sx={{ mt: 4, color: "#333" }}>
-            Resumo da Empresa: {filters.account}
-          </Typography>
+          <SectionTitle>Resumo da Empresa: {filters.account}</SectionTitle>
         )}
 
-        <Grid container spacing={3} sx={{ mt: 1 }}>
-          {" "}
-          {companies.map((company, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              {" "}
-              <SummaryCards company={company} transactions={filtered} />
-            </Grid>
-          ))}
-        </Grid>
+        <SummaryGridContainer>
+          {companies.map((company, index) => {
+            const companySpecificTransactions = transactions.filter(
+              (tx) => tx.account === company.name
+            );
+            return (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <SummaryCards
+                  company={company}
+                  transactions={companySpecificTransactions}
+                  filterDate={filters.date}
+                />
+              </Grid>
+            );
+          })}
+        </SummaryGridContainer>
 
         {transactions.length > 0 &&
           companies.length === 0 &&
           (filters.account || filters.industry || filters.state) && (
-            <Typography
-              variant="subtitle1"
-              sx={{ mt: 4, color: "gray", textAlign: "center" }}
-            >
+            <CenteredMessage>
               Nenhuma empresa encontrada para os filtros de Conta, Indústria ou
               Estado aplicados.
-            </Typography>
+            </CenteredMessage>
           )}
 
-        <Typography
-          variant="body2"
-          sx={{ mt: 4, color: "gray", textAlign: "center" }}
-        >
-          {filtered.length} transações encontradas para os filtros aplicados.
-        </Typography>
-      </Box>
-    </Box>
+        <CenteredMessage variant="body2">
+          {filteredForChart.length} transações encontradas para os filtros
+          aplicados (no gráfico).
+        </CenteredMessage>
+      </MainContentWrapper>
+    </PageWrapper>
   );
 }
